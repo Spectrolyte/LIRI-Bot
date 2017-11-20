@@ -26,7 +26,7 @@ else if (command === 'do-what-it-says') {
 	runTxtCommand();
 }
 else {
-	console.log('Sorry, I don\'nt recognize that input.');
+	console.log('Sorry, I don\'t recognize that input.');
 }
 
 // grabs the last 20 tweets from Twitter account
@@ -49,31 +49,29 @@ function getTweets () {
 // shows information about the specified song
 	// if song isn't defined, default to "The Sign" by Ace of Base;
 function getSong() {
+	var song;
+
 	if (!searchQuery) {
-		// look up "The Sign" by Ace of Base;
-		spotifyClient.search({ type: 'track', query: 'The Sign', limit: 1 }, function(error, data) {
-		  if (error) {
-		    return console.log('Error occurred: ' + error);
-		  }
-		
-		console.log('information about "The Sign" by Ace of Base goes here');
-		
-		})
+		song = 'The Sign Ace of Base';
 	}
 	else {
-		// log: artist(s), song's name, preview link of the song from Spotify, album that the song is from
-		spotifyClient.search({ type: 'track', query: searchQuery }, function(error, data) {
-		  if (error) {
-		    return console.log('Error occurred: ' + error);
-		  }
-		 
-		 console.log('Artist(s): ' + data.tracks.items[0].artists[0].name);
-		 console.log('Song: ' + data.tracks.items[0].name);
-		 console.log('Preview Link: ' + data.tracks.items[0].preview_url);
-		 console.log('Album: ' + data.tracks.items[0].album.name);
-
-		})
+		song = searchQuery;
 	}
+
+	// log: artist(s), song's name, preview link of the song from Spotify, album that the song is from
+	spotifyClient.search({ type: 'track', query: song }, function(error, data) {
+	  if (error) {
+	    return console.log('Error occurred: ' + error);
+	  }
+	 
+	 console.log('Artist(s): ' + data.tracks.items[0].artists[0].name);
+	 console.log('Song: ' + data.tracks.items[0].name);
+	 console.log('Preview Link: ' + data.tracks.items[0].preview_url);
+	 console.log('Album: ' + data.tracks.items[0].album.name);
+	 console.log('-------------------------');
+
+	})
+	
 
 }
 
