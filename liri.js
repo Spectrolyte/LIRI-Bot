@@ -79,14 +79,30 @@ function getSong() {
 
 // shows information about specified movie
 function getMovie () {
-// * Title of the movie.
-//  * Year the movie came out.
-//  * IMDB Rating of the movie.
-//  * Rotten Tomatoes Rating of the movie.
-//  * Country where the movie was produced.
-//  * Language of the movie.
-//  * Plot of the movie.
-//  * Actors in the movie.
+	var movie;
+
+	if (!searchQuery) {
+		movie = 'Mr. Nobody';
+	}
+	else {
+		movie = searchQuery;
+	}
+
+	request('http://www.omdbapi.com/?apikey=trilogy&t=' + movie, function (error, response, body) {
+		if (!error || response.statusCode === 200) {
+			var data = JSON.parse(body);
+			console.log('Title: ' + data.Title);
+			console.log('Release Year: ' + data.Released);
+			console.log('IMBD Rating: ' + data.Ratings[0].Value);
+			console.log('Rotten Tomatoes: ' + data.Ratings[1].Value);
+			console.log('Country: ' + data.Country);
+			console.log('Language: ' + data.Language);
+			console.log('Plot: ' + data.Plot);
+			console.log('Actors: ' + data.Actors);
+			console.log('-------------------------');
+		}
+	
+	})
 
 }
 
