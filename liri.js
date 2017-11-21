@@ -34,7 +34,7 @@ function checkCommand () {
 
 // grabs the last 20 tweets from Twitter account
 function getTweets () {
-	twitterClient.get('statuses/user_timeline', {'user_id': '718904424848957440', 'count': 20}, function (error, tweets, response) {
+	twitterClient.get('statuses/user_timeline', {'user_id': '932784042499379200', 'count': 20}, function (error, tweets, response) {
 		if (error) {
 			return console.log(error);
 		}
