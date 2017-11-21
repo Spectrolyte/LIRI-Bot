@@ -2,6 +2,7 @@
 var Twitter = require('twitter');
 var Spotify = require('node-spotify-api');
 var request = require('request');
+var fs = require('fs');
 
 // importing twitter and spotify keys from key.js
 var twitterClient = new Twitter(require('./keys.js').twitterKeys);
@@ -13,20 +14,22 @@ var command = process.argv[2];
 var searchQuery = process.argv.slice(3).join(' ');
 
 // checking what command the user put in
-if (command === 'my-tweets') {
-	getTweets();
-}
-else if (command === 'spotify-this-song') {
-	getSong();
-}
-else if (command === 'movie-this') {
-	getMovie();
-}
-else if (command === 'do-what-it-says') {
-	runTxtCommand();
-}
-else {
-	console.log('Sorry, I don\'t recognize that input.');
+function checkCommand () {
+	if (command === 'my-tweets') {
+		getTweets();
+	}
+	else if (command === 'spotify-this-song') {
+		getSong();
+	}
+	else if (command === 'movie-this') {
+		getMovie();
+	}
+	else if (command === 'do-what-it-says') {
+		runTxtCommand();
+	}
+	else {
+		console.log('Sorry, I don\'t recognize that input.');
+	}
 }
 
 // grabs the last 20 tweets from Twitter account
@@ -47,10 +50,10 @@ function getTweets () {
 }
 
 // shows information about the specified song
-	// if song isn't defined, default to "The Sign" by Ace of Base;
 function getSong() {
 	var song;
 
+	// if searchQuery isn't defined, default to "The Sign" by Ace of Base
 	if (!searchQuery) {
 		song = 'The Sign Ace of Base';
 	}
@@ -58,7 +61,7 @@ function getSong() {
 		song = searchQuery;
 	}
 
-	// log: artist(s), song's name, preview link of the song from Spotify, album that the song is from
+	// prints song information with spotify mod
 	spotifyClient.search({ type: 'track', query: song }, function(error, data) {
 	  if (error) {
 	    return console.log('Error occurred: ' + error);
@@ -79,6 +82,7 @@ function getSong() {
 function getMovie () {
 	var movie;
 
+	// if no searchQuery is provided, default to Mr. Nobody
 	if (!searchQuery) {
 		movie = 'Mr. Nobody';
 	}
@@ -86,6 +90,7 @@ function getMovie () {
 		movie = searchQuery;
 	}
 
+	// prints movie info using request mod
 	request('http://www.omdbapi.com/?apikey=trilogy&t=' + movie, function (error, response, body) {
 		if (!error || response.statusCode === 200) {
 			var data = JSON.parse(body);
@@ -106,5 +111,37 @@ function getMovie () {
 
 // runs command from random.txt file
 function runTxtCommand () {
+	fs.readFile('random.txt', 'utf8', function(error, data) {
+		if (error) {
+			return console.log(error);
+		}
 
+		// split text at its comma
+		var commandLine = data.split(',');
+
+		// assigning command and searchQuery
+		command = commandLine[0];
+		searchQuery = commandLine[1];
+
+		// run checkCommand with newly assigned command and searchQuery
+		checkCommand();
+
+	})
 }
+
+checkCommand();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
